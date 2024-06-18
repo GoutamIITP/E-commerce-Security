@@ -55,27 +55,26 @@ def predict():
 
 @app.route("/password")
 def password():
-    return render_template("password.html", spam_prediction=None, error=None)
+    return render_template("password.html", strength=None, error=None)
 
 
 @app.route("/password_predict", methods=['GET', 'POST'])
-def password_predict():
+def passwordpredict():
     if request.method == "POST":
         exampleInputpassword1 = request.form["password"]
-    else:
-        return render_template("password.html")
+        try:
+            saved_vectorizer = load_vectorizer()
+            final_model = load_passmodel()
 
-    saved_vectorizer = load_vectorizer()
-    final_model = load_passmodel()
-
-    password_prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
-    if(password_prediction==0):
-        return render_template("password.html", strength="Very Weak Password", error=None)
-    elif(password_prediction==1):
-        return render_template("password.html", strength="Average Password", error=None)
-    elif(password_prediction==2):
-        return render_template("password.html", strength="Strong Password", error=None)     
-    
+            password_prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
+            if(password_prediction==0):
+                return render_template("password.html", strength="Very Weak Password", error=None)
+            elif(password_prediction==1):
+                return render_template("password.html", strength="Average Password", error=None)
+            elif(password_prediction==2):
+                return render_template("password.html", strength="Strong Password", error=None)
+        except Exception as e:
+            return render_template("password.html", strength=None, error=None)
     
  
 
