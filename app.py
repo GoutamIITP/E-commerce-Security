@@ -55,27 +55,35 @@ def predict():
 
 @app.route("/password")
 def password():
-    return render_template("password.html", strength=None, error=None)
+    return render_template("password.html")
+
+
 
 
 @app.route("/password_predict", methods=['GET', 'POST'])
-def passwordpredict():
+def password_predict():
     if request.method == "POST":
         exampleInputpassword1 = request.form["password"]
         try:
             saved_vectorizer = load_vectorizer()
+            app.logger.info("Loaded vectorizer successfully")
             final_model = load_passmodel()
+            app.logger.info("Loaded model successfully")
 
             password_prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
-            if(password_prediction==0):
+            app.logger.info("Password prediction: %s", password_prediction)
+            if password_prediction == 0:
                 return render_template("password.html", strength="Very Weak Password", error=None)
-            elif(password_prediction==1):
+            elif password_prediction == 1:
                 return render_template("password.html", strength="Average Password", error=None)
-            elif(password_prediction==2):
+            elif password_prediction == 2:
                 return render_template("password.html", strength="Strong Password", error=None)
+        except FileNotFoundError as e:
+            app.logger.error("Error loading vectorizer or model: %s", e)
+            return render_template("password.html", strength=None, error="Error loading model or vectorizer")
         except Exception as e:
-            return render_template("password.html", strength=None, error=None)
-    
+            app.logger.error("Unexpected error: %s", e)
+            return render_template("password.html", strength=None, error="An unexpected error occurred")
  
 
 
