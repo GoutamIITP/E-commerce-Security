@@ -63,6 +63,7 @@ def password():
 @app.route("/password_predict", methods=['GET', 'POST'])
 def password_predict():
     if request.method == "POST":
+        pass
         exampleInputpassword1 = request.form["password"]
         try:
             saved_vectorizer = load_vectorizer()
@@ -84,7 +85,8 @@ def password_predict():
         except Exception as e:
             app.logger.error("Unexpected error: %s", e)
             return render_template("password.html", strength=None, error="An unexpected error occurred")
- 
+    else:
+        return render_template("password.html")
 
 
 if __name__ == "__main__":
