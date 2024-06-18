@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request,url_for
 from functions import (load_model, predict_spam, load_credit_model, predict_credit)
-from functions import load_vectorizer,load_passmodel, check_password_strength, word_divide_char   
+from passfunc import (load_vectorizer,load_passmodel, check_password_strength, word_divide_char)  
 
 app = Flask(__name__)
 
