@@ -64,19 +64,20 @@ def password():
 def password_predict():
     if request.method == "POST":
         exampleInputpassword1 = request.form["password"]
-        
+        app.logger.info("exampleInputpassword1")
+
         saved_vectorizer = load_vectorizer()
         app.logger.info("Loaded vectorizer successfully")
         final_model = load_passmodel()
         app.logger.info("Loaded model successfully")
 
-        password_prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
-        app.logger.info("Password prediction: %s", password_prediction)
-        if password_prediction == 0:
+        prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
+        # app.logger.info("Password prediction: %s", prediction)
+        if prediction == 0:
             return render_template("password.html", strength="Very Weak Password", error=None)
-        elif password_prediction == 1:
+        elif prediction == 1:
             return render_template("password.html", strength="Average Password", error=None)
-        elif password_prediction == 2:
+        elif prediction == 2:
             return render_template("password.html", strength="Strong Password", error=None)
     else:
         return render_template("password.html")

@@ -15,14 +15,17 @@ def load_passmodel():
         final_model = pickle.load(file)
     return final_model
 
-def word_divide_char(inputs):
-    character = []
-    for i in inputs:
-        character.append(i)
-    return character
+# def word_divide_char(inputs):
+#     character = []
+#     for i in inputs:
+#         character.append(i)
+#     return character
+def word_divide_char(password):
+    return list(password)
 
 def check_password_strength(exampleInputpassword1, saved_vectorizer, final_model):
-    password = np.array([exampleInputpassword1]) 
+    password = np.array([exampleInputpassword1])
+    # password_str = ''.join(password_chars)
     vectorized_password = saved_vectorizer.transform(password)
-    password_prediction = final_model.predict(vectorized_password)
-    return password_prediction
+    prediction = final_model.predict(vectorized_password)
+    return prediction
