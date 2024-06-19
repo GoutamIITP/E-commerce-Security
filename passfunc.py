@@ -20,8 +20,8 @@ def load_passmodel():
 #     for i in inputs:
 #         character.append(i)
 #     return character
-def word_divide_char(password):
-    return list(password)
+# def word_divide_char(password):
+#     return list(password)
 
 def check_password_strength(exampleInputpassword1, saved_vectorizer, final_model):
     password = np.array([exampleInputpassword1])
