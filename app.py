@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request,url_for
 from functions import (load_model, predict_spam, load_credit_model, predict_credit)
-from passfunc import (load_vectorizer,load_passmodel, check_password_strength)  
+from passfunc import (load_pass_model, predict_password_strength, extract_features)  
 
 app = Flask(__name__)
 
@@ -60,27 +60,16 @@ def password():
 
 
 
-@app.route("/password_predict", methods=['POST'])
+@app.route("/password_predict", methods=['GET','POST'])
 def password_predict():
     if request.method == "POST":
-        exampleInputpassword1 = request.form["password"]
-        app.logger.info("exampleInputpassword1")
-
-        saved_vectorizer = load_vectorizer()
-        app.logger.info("Loaded vectorizer successfully")
-        final_model = load_passmodel()
-        app.logger.info("Loaded model successfully")
-
-        prediction = check_password_strength(exampleInputpassword1, saved_vectorizer, final_model)
-        # app.logger.info("Password prediction: %s", prediction)
-        if prediction == 0:
-            return render_template("password.html", strength="Very Weak Password", error=None)
-        elif prediction == 1:
-            return render_template("password.html", strength="Average Password", error=None)
-        elif prediction == 2:
-            return render_template("password.html", strength="Strong Password", error=None)
+        exampleInputPassword1 = request.form["password"]
+        
+        pass_model = load_pass_model()
+        prediction = predict_password_strength(exampleInputPassword1, pass_model)
+        return render_template("password.html", strength=prediction)
     else:
-        return render_template("password.html")
+        return render_template("password.html", strength="")
 
 
 if __name__ == "__main__":
